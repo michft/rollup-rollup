@@ -1,0 +1,11 @@
+#!/bin/bash
+
+REGION="ap-southeast-2"
+IP=$(wget -qO -  http://checkip.dyndns.com/ | \
+  cut -d' ' -f6 | cut -d'<' -f1 )
+
+echo "Opening port 22 $IP/32"
+export AWS_CONFIG_FILE=~/.aws
+export AWS_DEFAULT_REGION=$REGION
+aws ec2 authorize-security-group-ingress --group-id sg-d79809ed --ip-protocol tcp --from-port 22 --to-port 22 --cidr-ip "$IP"/32
+aws ec2 authorize-security-group-ingress --group-id sg-d79809ed --ip-protocol tcp --from-port 25211 --to-port 25211 --cidr-ip "$IP"/32
